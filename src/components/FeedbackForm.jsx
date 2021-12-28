@@ -15,7 +15,7 @@ function FeedbackForm() {
 
   const handleTextChange = (e) => {
     // VALIDATION
-    if(text == '') {
+    if(text === '') {
       setBtnDisabled(true)
       setMessage(null)
       // checks if there is text but not long enough
