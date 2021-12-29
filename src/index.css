@@ -11,8 +11,12 @@
 
 body {
   background-color: #202142;
-  color: #fff;
   line-height: 1.6;
+  color: #fff;
+}
+
+a {
+  color: #ff6a95;
 }
 
 ul {
@@ -189,7 +193,7 @@ input:focus {
 
 .about-link {
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   right: 20px;
   color: #fff;
   cursor: pointer;
@@ -200,6 +204,14 @@ input:focus {
 }
 
 .about-link a:hover {
+  color: #ff6a95;
+}
+
+.home-link a {
+  color: #000;
+}
+
+.home-link a:hover {
   color: #ff6a95;
 }
 
