@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 const FeedbackContext = createContext();
 
@@ -12,25 +11,41 @@ export const FeedbackProvider = ({ children }) => {
   });
 
   // UPDATE FEEDBACK ITEM
-  const updateFeedback = (id, updItem) => {
-    // takes all feedbacks and look for that with passed id
-    // returs updated item and others witn no change
+  const updateFeedback = async (id, updItem) => {
+    const resp = await fetch(`/feedback/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updItem),
+    });
+
+    const data = await resp.json();
+
     setFeedback(
-      feedback.map((item) => (item.id === id ? { ...item, ...updItem } : item))
+      feedback.map((item) => (item.id === id ? { ...item, ...data } : item))
     );
   };
 
   // ADD FEEDBACK
-  const addFeedback = (newFeedback) => {
-    // add id to newFeedback with uuid
-    newFeedback.id = uuidv4();
-    // sets array of new and prev feedbacks
-    setFeedback([newFeedback, ...feedback]);
+  const addFeedback = async (newFeedback) => {
+    const resp = await fetch("/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newFeedback),
+    });
+    const data = await resp.json();
+    setFeedback([data, ...feedback]);
   };
 
   // DELETE FEEDBACK
-  const deleteFeedback = (id) => {
+  const deleteFeedback = async (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
+      await fetch(`/feedback/${id}`, {
+        method: "DELETE",
+      });
       setFeedback(feedback.filter((item) => item.id !== id));
     }
   };
@@ -45,9 +60,7 @@ export const FeedbackProvider = ({ children }) => {
 
   // FETCH DATA
   const fetchData = async () => {
-    const resp = await fetch(
-      "http://localhost:5000/feedback?_sort=id&_order=desc"
-    );
+    const resp = await fetch("/feedback?_sort=id&_order=desc");
     const data = await resp.json();
     setFeedback(data);
     setIsLoading(false);
